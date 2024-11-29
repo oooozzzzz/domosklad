@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String   @id @default(uuid())
+  tg_id           String   @unique
+  first_name      String
+  bankCard        String  @default("Не указан")
+  fio             String?  @default("Не указан")
+  createdAt       DateTime @default(now())
+  isAdmin         Boolean  @default(false)
+  phone_number    String?  @default("Не указан")
+  pointsCollected Int      @default(0)
+  pointsWithdrawn Int      @default(0)
+  pointsNow       Int      @default(0)
+  paperTaken      Int      @default(0)
+  cardboardTaken  Int      @default(0)
+  cansTaken       Int      @default(0)
+  otherTaken      Int      @default(0)
+  petTaken        Int      @default(0)
+}
+
+model Transaction {
+  id             String   @id @default(uuid())
+  createdAt      DateTime @default(now())
+  user_tg_id     String
+  admin_tg_id    String
+  paperTaken     Int
+  petTaken       Int
+  cardboardTaken Int
+  cansTaken      Int
+  otherTaken     Int
+  pointsToAward  Int
+}
+
+model Password {
+  label String @id
+  value String
+}

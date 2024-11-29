@@ -1,0 +1,9 @@
+node_modules
+# Keep environment variables out of version control
+.env
+checkpointer
+store
+prisma/dev.db
+prisma/migrations
+checkpoints.db
+credentials.json
