@@ -1,7 +1,4 @@
-import {
-	getBookingData,
-	signOrder,
-} from "../bookingOrder.js";
+import { getBookingData, signOrder } from "../bookingOrder.js";
 import { getUserInfo } from "../db.js";
 import { confirmBookingKeyboard } from "../keyboards/confirmBookingKeyboard.js";
 import { numberOfPersonsKeyboard } from "../keyboards/numberOfPersonsKeyboard.js";
@@ -47,12 +44,7 @@ const makeOrder = async (conversation, ctx) => {
 			reply_markup: toAdminMenuKeyboard,
 		});
 	}
-	const pet = await ask(
-		conversation,
-		ctx,
-		" сколько грамм ПЭТ сдано?",
-		"pet",
-	);
+	const pet = await ask(conversation, ctx, " сколько грамм ПЭТ сдано?", "pet");
 	if (!pet) {
 		return ctx.reply("Операция отменена", {
 			reply_markup: toAdminMenuKeyboard,
@@ -127,7 +119,7 @@ export const checkUser = async (conversation, ctx) => {
 	);
 	const userInfo = await getUserInfo(userId);
 	if (!userInfo) return ctx.reply("Пользователь не найден");
-	await ctx.reply(
+	await ctx.replyWithMarkdownV2(
 		`Пользователь __${userInfo.fio}__
 Используйте кнопки, чтобы продолжить`,
 		{ reply_markup: confirmUserKeyboard(userId) },

@@ -7,8 +7,8 @@ import { updateStartInfo } from "../db.js";
 const handleInfo = async (ctx, { fio, cardNumber, phoneNumber }) => {
 	const isValidCard = isValidCardNumber(cardNumber);
 	if (isValidCard === true) {
-		await ctx.reply(
-			"Номер карты подтвержден\\. Вы всегда сможете поменять информацию о карте в личном кабинете",
+		await ctx.replyWithMarkdownV2(
+			"Номер карты подтвержден\\. Вы всегда сможете поменять информацию о карте во вкладке __Профиль__",
 			{ reply_markup: toMainMenuKeyboard() },
 		);
 		await updateStartInfo({
@@ -25,14 +25,14 @@ const handleInfo = async (ctx, { fio, cardNumber, phoneNumber }) => {
 			fio,
 		});
 		if (isValidCard == "canceled") {
-			return await ctx.reply(
+			return await ctx.replyWithMarkdownV2(
 				"Вы сможете добавить информацию о карте во вкладке __Профиль__",
 				{
 					reply_markup: toMainMenuKeyboard(),
 				},
 			);
 		} else {
-			await ctx.reply(
+			await ctx.replyWithMarkdownV2(
 				"Невалидный номер карты\\. Вы сможете поменять информацию о карте в личном кабинете",
 				{ reply_markup: toMainMenuKeyboard() },
 			);
@@ -59,7 +59,9 @@ const askPhone = async (conversation, ctx) => {
 };
 
 export const startConversation = async (conversation, ctx) => {
-	const beginning = await ctx.reply("Пожалуйста, введите свои ФИО");
+	const beginning = await ctx.reply(
+		"Пожалуйста, введите свои ФИО. Эта информация нужна для того, чтобы менеджер на пункте приема мусора мог вас узнать",
+	);
 	const fioCtx = await conversation.wait();
 	const fio = fioCtx.message?.text;
 	if (!fio) {
@@ -74,9 +76,12 @@ export const startConversation = async (conversation, ctx) => {
 	});
 	// const phoneCtx = await conversation.wait();
 	const phoneNumber = await askPhone(conversation, ctx);
-	await ctx.reply("Спасибо\\! Подождите, пожалуйста, идёт обработка данных", {
-		reply_markup: { remove_keyboard: true },
-	});
+	await ctx.replyWithMarkdownV2(
+		"Спасибо\\! Подождите, пожалуйста, идёт обработка данных",
+		{
+			reply_markup: { remove_keyboard: true },
+		},
+	);
 	await delay(3000);
 	await ctx.reply(
 		"Введите номер карты, на которую Вам будут приходить деньги",
