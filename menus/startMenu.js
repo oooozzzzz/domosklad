@@ -61,7 +61,9 @@ export const profileMenu = new Menu("profileMenu")
 		await ctx.conversation.enter("addCard");
 	})
 	.row()
-	.text("Изменить ФИО", async (ctx) => {})
+	.text("Изменить ФИО", async (ctx) => {
+		await ctx.conversation.enter("askName");
+	})
 	.row()
 	.text("Назад", async (ctx) => {
 		ctx.menu.nav("startMenu");

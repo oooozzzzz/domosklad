@@ -225,3 +225,16 @@ export const handleWithdrawal = async (tg_ig, points) => {
 		return false;
 	}
 };
+
+export const updateName = async (tg_id, name) => {
+	tg_id = tg_id.toString();
+	try {
+		await prisma.user.update({
+			where: { tg_id },
+			data: { fio: name },
+		});
+		return true;
+	} catch (error) {
+		return false;
+	}
+};
