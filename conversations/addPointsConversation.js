@@ -1,5 +1,6 @@
 import { getBookingData, signOrder } from "../bookingOrder.js";
 import { getUserInfo } from "../db.js";
+import { cancelKeyboard } from "../keyboards/cancelKeyboard.js";
 import { confirmBookingKeyboard } from "../keyboards/confirmBookingKeyboard.js";
 import { numberOfPersonsKeyboard } from "../keyboards/numberOfPersonsKeyboard.js";
 import { confirmUserKeyboard } from "../keyboards/skipKeyboard.js";
@@ -10,14 +11,8 @@ import { toMainMenuKeyboard } from "../keyboards/toMainMenuKeyboard.js";
 const ask = async (conversation, ctx, question, item) => {
 	let markup;
 	switch (item) {
-		case "time":
-			markup = timePickKeyboard;
-			break;
-		case "guests":
-			markup = numberOfPersonsKeyboard;
-			break;
-		case "wishes":
-			markup = { remove_keyboard: true };
+		case "userId":
+			markup = cancelKeyboard;
 			break;
 		default:
 			markup = { remove_keyboard: true };
@@ -91,7 +86,7 @@ const makeOrder = async (conversation, ctx) => {
 	const clientId = data.clientId;
 	const clientInfo = await getUserInfo(clientId);
 	await ctx.reply(
-		`Информация о транзакции\\.
+		`Информация о транзакции.
 Сдал: ${clientInfo.fio}
 Сдано
 Картона: ${ctx.session.cardboard} грамм
@@ -117,6 +112,10 @@ export const checkUser = async (conversation, ctx) => {
 		"Введите id пользователя",
 		"userId",
 	);
+	if (!userId)
+		return ctx.reply("Операция отменена", {
+			reply_markup: toAdminMenuKeyboard,
+		});
 	const userInfo = await getUserInfo(userId);
 	if (!userInfo) return ctx.reply("Пользователь не найден");
 	await ctx.replyWithMarkdownV2(

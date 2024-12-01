@@ -22,7 +22,6 @@ export const startMenu = new Menu("startMenu", { autoAnswer: false })
 	.row()
 	.text("Списать баллы", async (ctx) => {
 		ctx.session.toChat = false;
-		ctx.answerCallbackQuery();
 		await withdrawHandler(ctx);
 	})
 	.row()

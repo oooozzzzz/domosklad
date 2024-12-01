@@ -1,14 +1,6 @@
-import {
-	clearOrder,
-	getBookingData,
-	signOrder,
-} from "./bookingOrder.js";
+import { clearOrder, getBookingData, signOrder } from "./bookingOrder.js";
 import { bot } from "./bot.js";
-import {
-	getAdminPassword,
-	getOwnerPassword,
-	handleTransaction,
-} from "./db.js";
+import { getAdminPassword, getOwnerPassword, handleTransaction } from "./db.js";
 import { clearSheet, reloadSheet } from "./googlesheet.js";
 import { adminHandler } from "./handlers/adminHandler.js";
 import { AIHandler } from "./handlers/AIHandler.js";
@@ -18,11 +10,7 @@ import { questionHandler } from "./handlers/questionsHandler.js";
 import { startHandler } from "./handlers/startHandler.js";
 
 import { startMenu } from "./menus/startMenu.js";
-import {
-	toAdminMenu,
-	toMainMenu,
-	toOwnerMenu,
-} from "./routes.js";
+import { toAdminMenu, toMainMenu, toOwnerMenu } from "./routes.js";
 import { createSheet, toPref } from "./services.js";
 
 bot.command("start", async (ctx) => startHandler(ctx));
@@ -55,16 +43,9 @@ bot.callbackQuery("yes", async (ctx) => {
 	await ctx.api.sendMessage(
 		transaction.clientId,
 		`Вам начислено __${transaction.points} 	баллов__\\. Вы можете списать их прямо сейчас\\!`,
+		{ parse_mode: "MarkdownV2" },
 	);
-	await toAdminMenu(ctx, false);
-	setTimeout(async () => {
-		await ctx.msg.delete();
-	}, 10 * 1000);
-});
-bot.callbackQuery("no", async (ctx) => {
-	await ctx.msg.delete();
-	await ctx.reply("Введите все данные заново");
-	await ctx.conversation.enter("checkUser");
+	// await ctx.conversation.enter("checkUser");
 	ctx.answerCallbackQuery();
 });
 bot.callbackQuery("toAdminMenu", async (ctx) => {
@@ -137,8 +118,7 @@ bot.callbackQuery(/-/, async (ctx) => {
 			await questionHandler(ctx);
 			break;
 		case "correct":
-			const adminId =
-				ctx.update.callback_query.message.chat.id;
+			const adminId = ctx.update.callback_query.message.chat.id;
 			const clientId = preference;
 			signOrder(adminId, { clientId, adminId });
 			await ctx.conversation.enter("addPoints");

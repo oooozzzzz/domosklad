@@ -8,13 +8,20 @@ export const withdrawHandler = async (ctx) => {
 		return await ctx.conversation.enter("addCard");
 	}
 	if (userInfo.pointsNow === 0) {
-		ctx.answerCallbackQuery({
+		console.log("No points");
+		// await ctx.api.answerCallbackQuery({
+		// 	callback_query_id: ctx.update.callback_query.id,
+		// 	text: "У вас нет баллов на счету",
+		// 	show_alert: true,
+		// });
+		await ctx.answerCallbackQuery({
 			text: "У вас нет баллов на счету",
 			show_alert: true,
 		});
 		return;
 	}
 	if (userInfo.pointsNow > 0) {
+		await ctx.answerCallbackQuery();
 		await ctx.conversation.enter("withdrawConversation");
 	}
 };
