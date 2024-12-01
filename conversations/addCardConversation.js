@@ -11,6 +11,7 @@ export const addCard = async (conversation, ctx) => {
 	while (true) {
 		const answerCtx = await conversation.wait();
 		let card = answerCtx.message?.text;
+		card = card.replace(/\s/g, "");
 		if (!card) {
 			answerCtx.msg.delete();
 			return await ctx.reply("Вы отменили добавление карты", {
