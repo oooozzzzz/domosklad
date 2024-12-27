@@ -1,9 +1,6 @@
-import { toMainMenuKeyboard } from "../keyboards/toMainMenuKeyboard.js";
-// import { loader } from "../loaders.js";
-import { clearMessageHistory, getAnswer, newThread } from "../services.js";
-import { v4 as uuidv4 } from "uuid";
 import { Graph } from "../RAG_class.js";
 import { workflow } from "../basic_workflow.js";
+import "dotenv/config";
 
 export const agent = new Graph({ workflow: workflow }).init();
 // console.log(
@@ -14,5 +11,9 @@ export const AIHandler = async (ctx) => {
 		const thread = ctx.session.thread_id;
 		const response = await agent.ask(ctx.message.text, thread);
 		await ctx.reply(response);
+		await ctx.api.sendMessage(
+			process.env.CHAT_ID,
+			`#Вопрос_ИИ\nВопрос от @${ctx.from.username}: ${ctx.message.text}\n\nОтвет: ${response}`,
+		);
 	}
 };
