@@ -15,7 +15,7 @@ export const profileHandler = async (ctx) => {
 	}
 	const userInfo = await getUserInfo(userId);
 	const text = `Информаиция о Вашем профиле:
-Баллов на счету: *${userInfo.pointsNow}*
+Рублей на счету: *${userInfo.pointsNow}*
 Уникальный код: *${userInfo.tg_id}*
 ФИО: *${userInfo.fio}*
 Номер телефона: *${"\\" + userInfo.phone_number}*
@@ -25,7 +25,7 @@ __*${
 			? "Не указан"
 			: formatBankCard(userInfo.bankCard)
 	}*__
-Баллов выведено: *${userInfo.pointsWithdrawn}*
+Рублей выведено: *${userInfo.pointsWithdrawn}*
 Сдано бумаги: *${userInfo.paperTaken}*
 Сдано алюминиевых банок: *${userInfo.cansTaken}*	
 Сдано картона: *${userInfo.cardboardTaken}*

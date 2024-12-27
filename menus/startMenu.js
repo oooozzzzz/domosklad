@@ -4,33 +4,43 @@ import { discountItem, discountsMenu } from "./discountsMenu.js";
 import { getUserInfo } from "../db.js";
 import { withdrawHandler } from "../handlers/withdrawHandler.js";
 import { profileHandler } from "../handlers/profileHandler.js";
+import { parse } from "dotenv";
 
 export const startMenu = new Menu("startMenu", { autoAnswer: false })
-	.text("Профиль", async (ctx) => {
+	.text("👤 Профиль", async (ctx) => {
 		ctx.answerCallbackQuery();
 		ctx.session.toChat = false;
 		await profileHandler(ctx);
 	})
-	// .row()
-	// .text("Баланс баллов", async (ctx) => {
-	// 	ctx.session.toChat = false;
-	// 	const userId = ctx.update.callback_query.message.chat.id;
-	// 	const userInfo = await getUserInfo(userId);
-	// 	ctx.menu.nav("backMenu");
-	// 	await ctx.msg.editText(`Баллов на счету: ${userInfo.pointsNow}`);
-	// })
 	.row()
-	.text("Списать баллы", async (ctx) => {
+	.text("💰 Списать баллы", async (ctx) => {
 		ctx.session.toChat = false;
-		await withdrawHandler(ctx);
+		// await withdrawHandler(ctx);
+		ctx.menu.nav("backMenu");
+		await ctx.msg.editText(
+			"Для того, чтобы списать баллы, придите в пункт приема вторсырья. Он находится по адресу г. Тюмень, ул. Т. Чаркова, 81 стр. 1. Мы работаем в будни с 18.00 до 20.00 и в субботу с 15.00 до 18.00.\nМинимальная сумма списания - 500 рублей",
+		);
 	})
 	.row()
-	.text("Общая информация", async (ctx) => {
+	.text("ℹ️ Общая информация", async (ctx) => {
 		ctx.answerCallbackQuery();
+		ctx.menu.nav("backMenu");
+		await ctx.msg.editText(
+			`Наш пункт приема находится по адресу г. Тюмень, ул. Т. Чаркова, 81 стр. 1. Мы работаем в будни с 18.00 до 20.00 и в субботу с 15.00 до 18.00.  
+Добро пожаловать!
+Связаться с нами Вы можете по номеру телефона 8 (800) 222-95-27 (доб. 3), в пунктах приема или на нашем сайте eco.domosklad.com
+
+Порядок начисления бонусных рублей:
+1) Приходите в пункт приема вторсырья
+2) Сдайте вторсырье и назовите администратору свой уникальный код, который можно посмотреть во вкладке "Профиль"
+3) Получите бонусные рубли
+`,
+			{ parse_mode: "HTML" },
+		);
 		ctx.session.toChat = false;
 	})
 	.row()
-	.text("Написать администратору", async (ctx) => {
+	.text("📝 Написать администратору", async (ctx) => {
 		ctx.answerCallbackQuery();
 
 		ctx.session.toChat = false;
@@ -41,7 +51,7 @@ export const startMenu = new Menu("startMenu", { autoAnswer: false })
 		}
 	})
 	.row()
-	.text("Служба поддержки", async (ctx) => {
+	.text("📞 Служба поддержки", async (ctx) => {
 		ctx.session.toChat = true;
 		ctx.answerCallbackQuery();
 		await ctx.reply(`Соеднияем с чатом поддержки... 
@@ -53,7 +63,9 @@ export const startMenu = new Menu("startMenu", { autoAnswer: false })
 
 const backMenu = new Menu("backMenu").text("Назад", async (ctx) => {
 	ctx.menu.nav("startMenu");
-	await ctx.msg.editText(ctx.t("start"));
+	await ctx.msg.editText(ctx.t("start"), {
+		parse_mode: "HTML",
+	});
 });
 
 export const profileMenu = new Menu("profileMenu")
@@ -67,7 +79,9 @@ export const profileMenu = new Menu("profileMenu")
 	.row()
 	.text("Назад", async (ctx) => {
 		ctx.menu.nav("startMenu");
-		await ctx.msg.editText(ctx.t("start"));
+		await ctx.msg.editText(ctx.t("start"), {
+			parse_mode: "HTML",
+		});
 	});
 
 startMenu.register([discountsMenu, discountItem, backMenu, profileMenu]);

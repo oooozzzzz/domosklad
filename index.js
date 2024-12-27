@@ -108,10 +108,9 @@ bot.callbackQuery(/-/, async (ctx) => {
 
 	const { preference, action } = toPref(ctx);
 	switch (action) {
-		case "pref":
-			try {
-				votePollHandler(ctx, preference);
-			} catch (error) {}
+		case "withdraw":
+			ctx.session.userId = preference;
+			await ctx.conversation.enter("withdrawConversation");
 			break;
 		case "question":
 			ctx.session.userId = preference;

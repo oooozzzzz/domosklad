@@ -18,6 +18,7 @@ import { addPoints, checkUser } from "./conversations/addPointsConversation.js";
 import { addCard } from "./conversations/addCardConversation.js";
 import { withdrawConversation } from "./conversations/withdrawConversations.js";
 import { askName } from "./conversations/addNameConversation.js";
+import { checkPoints } from "./conversations/checkPointsConversation.js";
 dotenv.config();
 
 const token = process.env.TOKEN;
@@ -68,6 +69,7 @@ bot.use(createConversation(answerQuestion));
 bot.use(createConversation(askQuestion));
 bot.use(createConversation(addCard));
 bot.use(createConversation(askName));
+bot.use(createConversation(checkPoints));
 bot.use(createConversation(startConversation));
 bot.use(createConversation(addPoints));
 bot.use(createConversation(checkUser));

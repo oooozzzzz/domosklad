@@ -60,7 +60,7 @@ const askPhone = async (conversation, ctx) => {
 
 export const startConversation = async (conversation, ctx) => {
 	const beginning = await ctx.reply(
-		"Пожалуйста, введите свои ФИО. Эта информация нужна для того, чтобы менеджер на пункте приема мусора мог вас узнать",
+		"Пожалуйста, введите свои ФИО. Эта информация нужна для того, чтобы менеджер на пункте приема вторсырья мог Вас узнать",
 	);
 	const fioCtx = await conversation.wait();
 	const fio = fioCtx.message?.text;

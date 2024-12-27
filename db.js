@@ -203,7 +203,7 @@ export const handleTransaction = async (data) => {
 	}
 };
 
-export const handleWithdrawal = async (tg_ig, points) => {
+export const handleWithdrawal = async (tg_ig, points, admin = "0") => {
 	tg_ig = tg_ig.toString();
 	points = parseInt(points);
 	try {
@@ -219,7 +219,7 @@ export const handleWithdrawal = async (tg_ig, points) => {
 			},
 		});
 		const { date, time } = getDateTime();
-		await addWithdrawal([time, date, tg_ig, points]);
+		await addWithdrawal([time, date, tg_ig, points, admin]);
 		return true;
 	} catch (error) {
 		return false;

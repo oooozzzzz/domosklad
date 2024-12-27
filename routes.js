@@ -8,6 +8,7 @@ export const toMainMenu = async (ctx, toDelete = false) => {
 	} catch (error) {}
 	await ctx.reply(ctx.t("start"), {
 		reply_markup: startMenu,
+		parse_mode: "HTML",
 	});
 };
 

@@ -17,6 +17,7 @@ export const startHandler = async (ctx) => {
 	} else {
 		await ctx.reply(ctx.t("start"), {
 			reply_markup: startMenu,
+			parse_mode: "HTML",
 		});
 	}
 };

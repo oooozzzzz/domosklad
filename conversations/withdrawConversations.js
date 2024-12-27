@@ -5,15 +5,12 @@ import { toMainMenuKeyboard } from "../keyboards/toMainMenuKeyboard.js";
 import { toMainMenu } from "../routes.js";
 
 export const withdrawConversation = async (conversation, ctx) => {
-	const userId = ctx.update.callback_query.message.chat.id;
+	const adminId = ctx.update.callback_query.message.chat.id;
+	const userId = ctx.session.userId;
 	const userInfo = await getUserInfo(userId);
-	await ctx.replyWithMarkdownV2(
-		` У вас на счету __${userInfo.pointsNow}__ баллов\\.
-Сколько вы хотите списать?`,
-		{
-			reply_markup: cancelKeyboard,
-		},
-	);
+	await ctx.replyWithMarkdownV2(`Сколько вы хотите списать?`, {
+		reply_markup: cancelKeyboard,
+	});
 	while (true) {
 		const answerCtx = await conversation.wait();
 		const points = parseInt(answerCtx.message?.text);
@@ -53,7 +50,7 @@ export const withdrawConversation = async (conversation, ctx) => {
 		}
 		if (points <= userInfo.pointsNow) {
 			await ctx.replyWithMarkdownV2(
-				`С Вашего счета будет списано __${points}__ баллов\\. Начислим на Вашу карту *${points}* рублей`,
+				`Со счета будет списано __${points}__ баллов\\. Продолжить\\?`,
 				{
 					reply_markup: confirmKeyboard,
 				},
@@ -69,8 +66,7 @@ export const withdrawConversation = async (conversation, ctx) => {
 				},
 			);
 			if (confirmation.match === "ok") {
-				console.log(confirmation);
-				await handleWithdrawal(userId, points);
+				await handleWithdrawal(userId, points, adminId);
 				await ctx.replyWithMarkdownV2(
 					"Вы списали __" + points + "__ баллов\\.",
 					{
@@ -88,4 +84,5 @@ export const withdrawConversation = async (conversation, ctx) => {
 			}
 		}
 	}
+	delete ctx.session.userId;
 };
